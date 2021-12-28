@@ -13,6 +13,19 @@ class Trie:
             node = node.children[ch]
         node.isEnd = True
 
+    def dfs(self, word: str, start: int) -> bool:
+        if start == len(word):
+            return True
+        node = self
+        for i in range(start, len(word)):
+            node = node.children[ord(word[i]) - ord("a")]
+            if node is None:
+                return False
+            if node.isEnd and self.dfs(word, i+1):
+                return True
+        return False
+
+
     def searchPrefix(self, prefix: str):
         node = self
         for ch in prefix:
