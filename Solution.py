@@ -1,6 +1,7 @@
 from typing import List
 from Trie import *
 from test_tree import *
+from test_array import *
 
 
 class Solution:

@@ -248,6 +248,16 @@ def kIncreasing(arr: List[int], k: int) -> int:
     return ans
 
 
+def rotate(matrix: List[List[int]]):
+    n = len(matrix)
+    for i in range(n // 2):
+        for j in range(n):
+            matrix[i][j], matrix[n - i - 1][j] = matrix[n - i - 1][j], matrix[i][j]
+    for i in range(n):
+        for j in range(i):
+            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
+
 if __name__ == "__main__":
     # a = "B0B6G0R6R0R6G9"
     # b = "B0R0G0R9R0B0G0"
