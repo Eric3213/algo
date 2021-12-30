@@ -77,3 +77,15 @@ class Solution:
                     temp.append(node.right)
             q = temp
         return ans
+
+    def maxPathSum(self, root: TreeNode):
+        self.maxSum = float('-inf')
+        def dfs(root):
+            if not root:
+                return 0
+            left = max(dfs(root.left), 0)
+            right = max(dfs(root.right), 0)
+            self.maxSum = max(self.maxSum, root.val + left + right)
+            return max(left, right) + root.val
+        dfs(root)
+        return self.maxSum
