@@ -20,7 +20,6 @@ class Solution:
             if not right: return left
             return root
 
-
         def findPath(root: TreeNode, s: int, e: int):
             if not root:
                 return
@@ -37,12 +36,12 @@ class Solution:
             print(ans1)
             if root.val == s:
                 res1.append(ans1[:])
-                print("res1: "+str(res1))
+                print("res1: " + str(res1))
                 n = len(ans1)
                 print(n)
             if root.val == e:
                 res2.append(ans1[:])
-                print("res2: "+str(res2))
+                print("res2: " + str(res2))
 
         root = lowestCommonAncestor(root, startValue, destValue)
         # print(root.val)
@@ -59,13 +58,22 @@ class Solution:
         print(str(ans1))
         return ''.join(ans1 + res2[0])
 
-
-if __name__ == "__main__":
-    root1 = TreeNode(3, None, None)
-    root2 = TreeNode(1, root1, None)
-    root3 = TreeNode(6, None, None)
-    root4 = TreeNode(4, None, None)
-    root5 = TreeNode(2, root3, root4)
-    root = TreeNode(5, root2, root5)
-    # print(root.val)
-    print(Solution.getDirections(self=Solution, root=root, startValue=3, destValue=6))
+    def zigzagLevelOrder(self, root: TreeNode):
+        if not root: return []
+        ans = []
+        i = 0
+        q = [root]
+        while q:
+            i += 1
+            if i % 2:
+                ans.append([node.val for node in q])
+            else:
+                ans.append([node.val for node in q[::-1]])
+            temp = []
+            for node in q:
+                if node.left:
+                    temp.append(node.left)
+                if node.right:
+                    temp.append(node.right)
+            q = temp
+        return ans

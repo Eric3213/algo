@@ -1,5 +1,6 @@
 from typing import List
 from Trie import *
+from test_tree import *
 
 
 class Solution:
@@ -16,3 +17,9 @@ class Solution:
             else:
                 root.insert(word)
         return ans
+
+    def zigzagLevelOrder(self, tree: TreeNode):
+        t = Solution()
+        return t.zigzagLevelOrder(tree)
+
+
