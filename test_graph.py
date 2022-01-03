@@ -1,8 +1,8 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 from typing import List
 
 
-def maximumInvitations(fa: List[int]) -> int:
+def maximumInvitations0(fa: List[int]) -> int:
     n = len(fa)
     graph = defaultdict(list)
     for i, f in enumerate(fa):
@@ -35,6 +35,46 @@ def maximumInvitations(fa: List[int]) -> int:
     dfs(graph, s)
     # print(total)
     return len(total)
+
+def maximumInvitations(graph: List[int]):
+    n = len(graph)
+    # 入度
+    degree = [0] * n
+    for w in graph:
+        degree[w] += 1
+
+    # 拓扑排序，同时得到最长链 deque
+    max_depth = [0] * n
+    q = deque(i for i, d in enumerate(degree) if d == 0)
+    while q:
+        v = q.popleft()
+        max_depth[v] += 1
+        w = graph[v]
+        max_depth[w] = max(max_depth[w], max_depth[v])
+        degree[w] -= 1
+        if degree[w] == 0:
+            q.append(w)
+
+    # maxRingSize sumChainSize 遍历deg
+    maxRingSize, sumChainSize = 0, 0
+    for i, d in enumerate(degree):
+        if d == 0:
+            continue
+        degree[i] = 0
+        ring_size = 1
+        v = graph[i]
+        while v != i:
+            degree[v] = 0
+            ring_size += 1
+            v = graph[v]
+        if ring_size == 2:
+            sumChainSize += 2 + max_depth[i] + max_depth[graph[i]]
+        else:
+            maxRingSize = max(maxRingSize, ring_size)
+    return max(maxRingSize, sumChainSize)
+
+
+
 
 fa = [2, 2, 1, 2]
 print(maximumInvitations(fa))

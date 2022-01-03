@@ -89,3 +89,28 @@ class Solution:
             return max(left, right) + root.val
         dfs(root)
         return self.maxSum
+
+    def diameterOfBinaryTree(self, root: TreeNode) -> int:
+        self.maxSum = float('-inf')
+        def dfs(root):
+            if not root:
+                return 0
+            left = max(dfs(root.left), 0)
+            right = max(dfs(root.right), 0)
+            self.maxSum = max(self.maxSum, 1 + left + right)
+            return max(left, right) + 1
+        dfs(root)
+        return self.maxSum
+
+    def isBalanced(self, root: TreeNode) -> bool:
+
+        def dfs(root):
+            if not root:
+                return 0
+            leftH = dfs(root.left)
+            rightH = dfs(root.right)
+            if leftH == -1 or rightH == -1 or abs(leftH - rightH) > 1:
+                return -1
+            return max(leftH, rightH) + 1
+
+        return dfs(root) >= 0
