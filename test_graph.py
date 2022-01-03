@@ -19,10 +19,10 @@ def maximumInvitations(fa: List[int]) -> int:
         seen.add(s)
         while (len(q) > 0):
             cur = q.pop()
-            print(f"cur={cur}")
+            # print(f"cur={cur}")
             node = graph[cur]
             for w in node:
-                print(f"w={w}")
+                # print(f"w={w}")
                 if w not in seen:
                     total.append(w)
                     q.append(w)
@@ -30,10 +30,10 @@ def maximumInvitations(fa: List[int]) -> int:
         return total[-1]
 
     s = dfs(graph, 0)
-    print(s)
+    # print(s)
     total = []
     dfs(graph, s)
-    print(total)
+    # print(total)
     return len(total)
 
 fa = [2, 2, 1, 2]

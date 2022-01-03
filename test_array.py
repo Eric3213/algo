@@ -258,6 +258,17 @@ def rotate(matrix: List[List[int]]):
             matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
 
 
+def dayOfTheWeek(day:int, month:int, year:int):
+    week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    monthdays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    ans = 0
+    ans += 365 * (year - 1971) + (year - 1969) // 4
+    ans += sum(monthdays[:month-1])
+    if month >= 3 and (year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)):
+        ans += 1
+    ans += day
+    return week[(ans + 3) % 7]
+
 if __name__ == "__main__":
     # a = "B0B6G0R6R0R6G9"
     # b = "B0R0G0R9R0B0G0"
