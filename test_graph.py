@@ -1,4 +1,5 @@
 from collections import defaultdict, deque
+from functools import lru_cache
 from typing import List
 
 
@@ -35,6 +36,7 @@ def maximumInvitations0(fa: List[int]) -> int:
     dfs(graph, s)
     # print(total)
     return len(total)
+
 
 def maximumInvitations(graph: List[int]):
     n = len(graph)
@@ -74,6 +76,30 @@ def maximumInvitations(graph: List[int]):
     return max(maxRingSize, sumChainSize)
 
 
+def catMouseGame(graph: List[List[int]]):
+    @lru_cache(None)
+    def dfs(m, c, i):
+        if i > len(graph) * 2:
+            return 0
+        if m == 0:
+            return -1
+        if m == c:
+            return 1
+        res = (-1) ** i
+        if i % 2:
+            for nxt in graph[c]:
+                if nxt:
+                    res = max(res, dfs(m, nxt, i+1))
+                if res == 1:
+                    break
+        else:
+            for nxt in graph[m]:
+                res = min(res, dfs(nxt, c, i+1))
+                if res == -1:
+                    break
+        return res
+    ans = dfs(1, 2, 0)
+    return 0 if ans == 0 else (1 if ans == -1 else 2)
 
 
 fa = [2, 2, 1, 2]
