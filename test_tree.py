@@ -80,6 +80,7 @@ class Solution:
 
     def maxPathSum(self, root: TreeNode):
         self.maxSum = float('-inf')
+
         def dfs(root):
             if not root:
                 return 0
@@ -87,11 +88,13 @@ class Solution:
             right = max(dfs(root.right), 0)
             self.maxSum = max(self.maxSum, root.val + left + right)
             return max(left, right) + root.val
+
         dfs(root)
         return self.maxSum
 
     def diameterOfBinaryTree(self, root: TreeNode) -> int:
         self.maxSum = float('-inf')
+
         def dfs(root):
             if not root:
                 return 0
@@ -99,6 +102,7 @@ class Solution:
             right = max(dfs(root.right), 0)
             self.maxSum = max(self.maxSum, 1 + left + right)
             return max(left, right) + 1
+
         dfs(root)
         return self.maxSum
 
@@ -114,3 +118,81 @@ class Solution:
             return max(leftH, rightH) + 1
 
         return dfs(root) >= 0
+
+    def successor(self, root: TreeNode):
+        root = root.right
+        while root.left:
+            root = root.left
+        return root.val
+
+    def predecessor(self, root: TreeNode):
+        root = root.left
+        while root.right:
+            root = root.right
+        return root.val
+
+    # 删除二叉搜索树的Node
+    def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
+        if not root:
+            return None
+        if key > root.val:
+            root.right = self.deleteNode(root.right, key)
+        elif key < root.val:
+            root.left = self.deleteNode(root.left, key)
+        else:
+            if not root.left and not root.right:
+                return None
+            elif root.right:
+                root.val = self.successor(root)
+                root.right = self.deleteNode(root.right, root.val)
+            else:
+                root.val = self.predecessor(root)
+                root.left = self.deleteNode(root.left, root.val)
+        return root
+
+
+class Codec:
+
+    def serialize(self, root):
+        if not root:
+            return "None"
+        return str(root.val) + ',' + self.serialize(root.left) + ',' + self.serialize(root.right)
+
+    def deserialize(self, data):
+
+        def dfs(datalist):
+            val = datalist.pop(0)
+            if val == 'None':
+                return None
+            root = TreeNode(int(val))
+            root.left = dfs(datalist)
+            root.right = dfs(datalist)
+            return root
+
+        datalist = data.split(',')
+        return dfs(datalist)
+
+
+def pre_order(root):
+    if not root:
+        return
+    ans.append(root.val)
+    pre_order(root.left)
+    pre_order(root.right)
+
+
+
+ser = Codec()
+deser = Codec()
+root = TreeNode(1)
+left = TreeNode(2)
+right = TreeNode(3)
+root.left = left
+root.right = right
+right.left = TreeNode(4)
+right.right = TreeNode(5)
+
+print(ser.serialize(root))
+ans = []
+pre_order((deser.deserialize(ser.serialize(root))))
+print(ans)
