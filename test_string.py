@@ -23,8 +23,22 @@ def truncateSentence(s: str, k: int) -> str:
     return " ".join(s.split(" ")[:k])
 
 
+def modifyString(s: str) -> str:
+    temp = list(s)
+    n = len(temp)
+    for i in range(n):
+        if temp[i] == '?':
+            for change in "abc":
+                if not (i > 0 and temp[i-1] == change or i < n - 1 and temp[i+1] == change):
+                    temp[i] = change
+                    break
+    return "".join(temp)
+
+
 if __name__ == "__main__":
     # s = "owoztneoer"
     # print(originalDigits(s))
-    s = "how old are you get away fuck you son of a bitch"
-    print(truncateSentence(s, 5))
+    # s = "how old are you get away fuck you son of a bitch"
+    # print(truncateSentence(s, 5))
+    s = '?cbfda?dfad?'
+    print(modifyString(s))
