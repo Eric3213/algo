@@ -42,3 +42,5 @@ class Trie:
     def startsWith(self, prefix: str):
         node = self.searchPrefix(prefix)
         return node is not None
+
+# test
