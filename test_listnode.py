@@ -25,3 +25,25 @@ def hasCycle2(head: Optional[ListNode]):
         if fast == slow:
             return True
     return False
+
+
+def deleteDuplicates(head: ListNode):
+    """
+
+    :param head: 升序链表
+    :return: 删除所有重复节点
+    """
+    if not head:
+        return head
+    dummy = ListNode()
+    dummy.next = head
+    cur = dummy
+
+    while cur.next and cur.next.next:
+        if cur.next.val == cur.next.next.val:
+            x = cur.next.val
+            while cur.next and cur.next.val == x:
+                cur.next = cur.next.next
+        else:
+            cur = cur.next
+    return dummy.next

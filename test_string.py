@@ -160,6 +160,26 @@ def longestValidParentheses(s: str):
     return maxLength
 
 
+def lengthOfLongestSubstring(s:str):
+    """
+
+    :param s:
+    :return: 最长无重复子序列
+    """
+    n = len(s)
+    r, ans = -1, 0
+    occ = set()
+    for i in range(n):
+        if i != 0:
+            occ.remove(s[i-1])
+        while r + 1 < n and s[r+1] not in occ:
+            occ.add(s[r+1])
+            r += 1
+        ans = max(ans, r - i + 1)
+    return ans
+
+
+
 
 if __name__ == "__main__":
     # s = "owoztneoer"
