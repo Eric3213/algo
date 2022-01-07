@@ -179,6 +179,15 @@ def lengthOfLongestSubstring(s:str):
     return ans
 
 
+def maxDepth(s: str):
+    ans, temp = 0, 0
+    for ch in s:
+        if ch == ")":
+            temp -= 1
+        elif ch == "(":
+            temp += 1
+            ans = max(ans, temp)
+    return ans
 
 
 if __name__ == "__main__":
