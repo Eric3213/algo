@@ -76,6 +76,29 @@ def maximumInvitations(graph: List[int]):
     return max(maxRingSize, sumChainSize)
 
 
+def canFinish(numCourses: int, prerequisites: List[List[int]]):
+    edges = defaultdict(list)
+    indeg = [0] * numCourses
+
+    for info in prerequisites:
+        edges[info[1]].append(info[0])
+        indeg[info[0]] += 1
+    q = deque(i for i in range(numCourses) if indeg[i] == 0)
+    visited = 0
+
+    while q:
+        visited += 1
+        u = q.popleft()
+        for v in edges[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                q.append(v)
+
+    return visited == numCourses
+
+
+
+
 def catMouseGame(graph: List[List[int]]):
     @lru_cache(None)
     def dfs(m, c, i):
@@ -100,6 +123,9 @@ def catMouseGame(graph: List[List[int]]):
         return res
     ans = dfs(1, 2, 0)
     return 0 if ans == 0 else (1 if ans == -1 else 2)
+
+
+
 
 
 fa = [2, 2, 1, 2]

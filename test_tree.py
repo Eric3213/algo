@@ -200,6 +200,67 @@ class Codec:
         return dfs(datalist)
 
 
+def inorderTraversal(self, root: TreeNode):
+    """
+    法一：递归
+    法二：迭代
+    法三：莫里斯
+    x 没有左节点：
+        x 加入答案  x = x.right
+    x 有左节点：
+        x 的predecessor 右孩子为空： 右孩子指向 x； x = x.left
+        x 的predecessor 右孩子不为空： x 加入答案； x = x.right
+    :param self:
+    :param root:
+    :return:
+    """
+    # def dfs(cur):
+    #     if not cur:
+    #         return
+    #
+    #     dfs(cur.left)
+    #     ans.append(cur.val)
+    #     dfs(cur.right)
+    #
+    # ans = []
+    # dfs(root)
+    # return ans
+
+    # 法2
+    # ans = []
+    # stack = []
+    # cur = root
+    # while stack or cur:
+    #     while cur:
+    #         stack.append(cur)
+    #         cur = cur.left
+    #     cur = stack.pop()
+    #     ans.append(cur.val)
+    #     cur = cur.right
+    # return ans
+
+    # 法3
+    ans = []
+    cur = root
+    while cur:
+        if not cur.left:
+            ans.append(cur.val)
+            cur = cur.right
+        else:
+            pre = cur.left
+            while pre.right and pre.right != cur:
+                pre = pre.right
+            if not pre.right:
+                pre.right = cur
+                cur = cur.left
+            else:
+                ans.append(cur.val)
+                cur = cur.right
+    return ans
+
+
+
+
 def pre_order(root):
     if not root:
         return

@@ -1,5 +1,5 @@
 import bisect
-from collections import Counter
+from collections import Counter, defaultdict
 from functools import cmp_to_key
 from typing import List
 
@@ -269,13 +269,88 @@ def dayOfTheWeek(day:int, month:int, year:int):
     ans += day
     return week[(ans + 3) % 7]
 
+
+def twoSum(nums: List[int], target: int):
+    temp = defaultdict()
+    for i, n in enumerate(nums):
+        if target - n in temp:
+            return [i, temp[target - n]]
+        else:
+            temp[n] = i
+    return []
+
+
+def grayCode(n: int):
+    """
+
+    :param n:
+    :return: n位格雷码
+    """
+    ans = [0]
+    for i in range(1, n + 1):
+        for j in range(len(ans) - 1, -1, -1):
+            ans.append(ans[j] | (1 << (i - 1)))
+    return ans
+
+
+def combinationSum(candidates: List[int], target: int):
+    """
+    回溯+剪枝
+    :param candidates: 无重复元素
+    :param target: 目标数字
+    :return: 组合总和，可以重复数字
+    """
+    candidates.sort()
+    ans = []
+
+    def find(start, use, remain):
+        for i in range(start, len(candidates)):
+            c = candidates[i]
+            if c == remain:
+                ans.append(use+[c])
+            elif c < remain:
+                find(i, use+[c], remain-c)
+            else:
+                return
+    find(0, [], target)
+    return ans
+
+
+def permuteUnique(nums: List[int]):
+    """
+    搜索回溯 递归内部去重
+    :param nums: 可以包含重复元素的序列
+    :return: 所有不重复的全排列
+    """
+    ans = []
+
+    def dfs(nums, path):
+        if not nums:
+            ans.append(path)
+            return
+        temp = list(set(nums))
+        for idx, i in enumerate(temp):
+            # 移除第一个符合项
+            nums.remove(i)
+            # print(f"remove后{nums}")
+            dfs(nums, path + [i])
+            nums.append(i)
+            # print(f"append后{nums}")
+
+    dfs(nums, [])
+    return ans
+
+
+
 if __name__ == "__main__":
+    a = [2,2,3]
+    print(permuteUnique(a))
     # a = "B0B6G0R6R0R6G9"
     # b = "B0R0G0R9R0B0G0"
     # c = "G4"
     # print(countPoints(a))
-    arr = [1, 2, 3, 5, 8, 10]
-    print(kIncreasing(arr, 2))
+    # arr = [1, 2, 3, 5, 8, 10]
+    # print(kIncreasing(arr, 2))
     # p = [[0, 9], [4, 1], [5, 7], [6, 2], [7, 4], [10, 9]]
     # q = [1, 9]
     #
