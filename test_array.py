@@ -341,10 +341,51 @@ def permuteUnique(nums: List[int]):
     return ans
 
 
+def minSwaps(nums: List[int]):
+    n = len(nums)
+    m = nums.count(1)
+    j, i = 0, n - m + 1
+    cur = 0
+    if nums[0] == 1:
+        cur += 1
+    while i < n:
+        if nums[i] == 1:
+            cur += 1
+        i += 1
+    i = n - m + 1
+    ans = cur
+    while i + 1 < n:
+        i += 1
+        j += 1
+        if nums[j] == 1:
+            cur += 1
+        if nums[i-1] == 1:
+            cur -= 1
+        ans = max(ans, cur)
+    cur = nums[:m].count(1)
+    ans = max(ans, cur)
+    i, j = 0, m - 1
+    while j + 1 < n:
+        i += 1
+        j += 1
+        if nums[i-1] == 1:
+            cur -= 1
+        if nums[j] == 1:
+            cur += 1
+        ans = max(ans, cur)
+    return m - ans
+
+
+
+
 
 if __name__ == "__main__":
-    a = [2,2,3]
-    print(permuteUnique(a))
+    a = [0, 1, 0, 1, 1, 0, 0]
+    b = [0, 1, 1, 1, 0, 0, 1, 1, 0]
+    c = [1, 1, 0, 0, 1]
+    print(minSwaps(a))
+    # a = [2,2,3]
+    # print(permuteUnique(a))
     # a = "B0B6G0R6R0R6G9"
     # b = "B0R0G0R9R0B0G0"
     # c = "G4"
