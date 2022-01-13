@@ -376,7 +376,10 @@ def minSwaps(nums: List[int]):
         ans = max(ans, cur)
     return m - ans
 
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 31b375e021212eb622fdb8993a670a0f367e2f94
 def dominantIndex(nums: List[int]):
     m1, m2, idx = -1, -1, 0
     for i, n in enumerate(nums):
@@ -407,7 +410,10 @@ def dominantIndex(nums: List[int]):
     #     return largestIndex
     # else:
     #     return -1
+<<<<<<< HEAD
 >>>>>>> b6845f2c162f338ae249be4556998db17fe03237
+=======
+>>>>>>> 31b375e021212eb622fdb8993a670a0f367e2f94
 
 
 
@@ -418,10 +424,15 @@ if __name__ == "__main__":
     b = [0, 1, 1, 1, 0, 0, 1, 1, 0]
     c = [1, 1, 0, 0, 1]
     print(minSwaps(a))
+<<<<<<< HEAD
 =======
     a = [1, 2, 3, 4]
     print(dominantIndex(a))
 >>>>>>> b6845f2c162f338ae249be4556998db17fe03237
+=======
+    a = [1, 2, 3, 4]
+    print(dominantIndex(a))
+>>>>>>> 31b375e021212eb622fdb8993a670a0f367e2f94
     # a = [2,2,3]
     # print(permuteUnique(a))
     # a = "B0B6G0R6R0R6G9"
