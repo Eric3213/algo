@@ -341,10 +341,45 @@ def permuteUnique(nums: List[int]):
     return ans
 
 
+def dominantIndex(nums: List[int]):
+    m1, m2, idx = -1, -1, 0
+    for i, n in enumerate(nums):
+        if n > m1:
+            m1, m2, idx = n, m1, i
+        elif n > m2:
+            m2 = n
+    return idx if m1 >= m2 * 2 else -1
+    # n = len(nums)
+    # if n == 1:
+    #     return 0
+    # if nums[0] >= nums[1]:
+    #     largest, secondLarge = nums[0], nums[1]
+    #     largestIndex = 0
+    # else:
+    #     largest, secondLarge = nums[1], nums[0]
+    #     largestIndex = 1
+    # for i in range(2, n):
+    #     if nums[i] > largest:
+    #         secondLarge = largest
+    #         largest = nums[i]
+    #         largestIndex = i
+    #     elif nums[i] > secondLarge:
+    #         secondLarge = nums[i]
+    # print(largest)
+    # print(secondLarge)
+    # if largest // 2 >= secondLarge:
+    #     return largestIndex
+    # else:
+    #     return -1
+
+
+
 
 if __name__ == "__main__":
-    a = [2,2,3]
-    print(permuteUnique(a))
+    a = [1, 2, 3, 4]
+    print(dominantIndex(a))
+    # a = [2,2,3]
+    # print(permuteUnique(a))
     # a = "B0B6G0R6R0R6G9"
     # b = "B0R0G0R9R0B0G0"
     # c = "G4"
