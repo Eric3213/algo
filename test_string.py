@@ -1,4 +1,5 @@
-from collections import Counter
+from collections import Counter, defaultdict
+from typing import List
 
 
 def originalDigits(s: str) -> str:
@@ -210,10 +211,94 @@ def validIPAddress(queryIP: str):
         return "Neither"
 
 
+def wordCount(startWords: List[str], targetWords: List[str]) -> int:
+    mymap = defaultdict(list)
+    for start in startWords:
+        n = len(start)
+        mymap[n].append(start)
+
+    ans = 0
+    for target in targetWords:
+        n = len(target)
+        target_list = mymap[n - 1]
+        flag = 0
+        for t in target_list:
+            if flag == 1:
+                break
+            temp = 0
+            for ch in t:
+                if ch not in target:
+                    temp += 1
+            if temp == n - 1:
+                flag = 1
+                ans += 1
+    return ans
+
+
+def isAdditiveNumber(num: str):
+    """
+    判断一个字符串是否是累加数
+    :param num:
+    :return:
+    """
+    n = len(num)
+    for secondStart in range(1, n-1):
+        if num[0] == "0" and secondStart != 1:
+            break
+        for secondEnd in range(secondStart, n-1):
+            if num[secondStart] == "0" and secondEnd != secondStart:
+                break
+            if valid(secondStart, secondEnd, num):
+                return True
+    return False
+
+
+def valid(secondStart: int, secondEnd: int, num: str):
+    n = len(num)
+    firstStart, firstEnd = 0, secondStart - 1
+    while secondEnd <= n-1:
+        third = stringAdd(num, firstStart, firstEnd, secondStart, secondEnd)
+        thirdStart = secondEnd + 1
+        thirdEnd = secondEnd + len(third)
+        if thirdEnd >= n or num[thirdStart:thirdEnd+1] != third:
+            break
+        if thirdEnd == n-1:
+            return True
+        firstStart, firstEnd = secondStart, secondEnd
+        secondStart, secondEnd = thirdStart, thirdEnd
+    return False
+
+
+def stringAdd(num: str, firstStart: int, firstEnd: int, secondStart: int, secondEnd: int):
+    third = []
+    carry, cur = 0, 0
+    while firstEnd >= firstStart or secondEnd >= secondStart or carry != 0:
+        cur = carry
+        if firstEnd >= firstStart:
+            cur += int(num[firstEnd])
+            firstEnd -= 1
+        if secondEnd >= secondStart:
+            cur += int(num[secondEnd])
+            secondEnd -= 1
+        carry = cur // 10
+        cur %= 10
+        third.append(str(cur))
+    return "".join(third[::-1])
+
+
+
+
+
+
 if __name__ == "__main__":
     # s = "owoztneoer"
     # print(originalDigits(s))
     # s = "how old are you get away fuck you son of a bitch"
     # print(truncateSentence(s, 5))
-    s = '?cbfda?dfad?'
-    print(modifyString(s))
+    # s = '?cbfda?dfad?'
+    # print(modifyString(s))
+    s = ['ab']
+    t = ['abc']
+    print(wordCount(s, t))
+    # a = [1, 0 , 1, 1, 0, 0, 1]
+    # print(minSwaps(a))
