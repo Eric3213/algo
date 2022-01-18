@@ -299,6 +299,25 @@ def countVowelPermutation(self, n: int) -> int:
     return res.sum() % 1000000007
 
 
+def getMinutes(t: str):
+    return ((ord(t[0]) - ord('0')) * 10 + ord(t[1]) - ord('0')) * 60 + (ord(t[3]) - ord('0')) * 10 + ord(t[4]) - ord('0')
+
+
+def findMinDifference(timePoints: List[str]):
+    n = len(timePoints)
+    if n > 1440:
+        return 0
+    timePoints.sort()
+    ans = float('inf')
+    t0Min = getMinutes(timePoints[0])
+    preMin = t0Min
+    for i in range(1, n):
+        minutes = getMinutes(timePoints[i])
+        ans = min(ans, minutes - preMin)
+        preMin = minutes
+    ans = min(ans, t0Min + 1440 - preMin)
+    return ans
+
 
 
 if __name__ == "__main__":
