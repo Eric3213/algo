@@ -2,6 +2,7 @@ from collections import Counter, defaultdict
 from typing import List
 import numpy as np
 
+
 def originalDigits(s: str) -> str:
     d = Counter(s)
     cnt = [0] * 10

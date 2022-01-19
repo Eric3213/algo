@@ -408,6 +408,14 @@ def dominantIndex(nums: List[int]):
     #     return -1
 
 
+def containsNearbyDuplicate(nums: List[int], k: int):
+    dic = defaultdict(int)
+    for i, n in enumerate(nums):
+        if dic.get(n) is not None:
+            if i - dic.get(n) <= k:
+                return True
+        dic[n] = i
+    return False
 
 
 if __name__ == "__main__":
