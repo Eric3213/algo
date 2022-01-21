@@ -97,8 +97,6 @@ def canFinish(numCourses: int, prerequisites: List[List[int]]):
     return visited == numCourses
 
 
-
-
 def catMouseGame(graph: List[List[int]]):
     @lru_cache(None)
     def dfs(m, c, i):
@@ -125,8 +123,35 @@ def catMouseGame(graph: List[List[int]]):
     return 0 if ans == 0 else (1 if ans == -1 else 2)
 
 
+def minJumps(arr: List[int]):
+    idxSameValue = defaultdict(list)
+    for i, a in enumerate(arr):
+        idxSameValue[a].append(i)
+    visitedIndex = set()
+    q = deque()
+    q.append([0, 0])
+    visitedIndex.add(0)
+    while q:
+        idx, step = q.popleft()
+        if idx == len(arr) - 1:
+            return step
+        step += 1
+        v = arr[idx]
+        for i in idxSameValue[v]:
+            if i not in visitedIndex:
+                visitedIndex.add(i)
+                q.append([i, step])
+        del idxSameValue[v]
+        if (idx + 1) < len(arr) and (idx + 1) not in visitedIndex:
+            visitedIndex.add(idx+1)
+            q.append([idx + 1, step])
+        if (idx - 1) >= 0 and (idx - 1) not in visitedIndex:
+            visitedIndex.add(idx+1)
+            q.append([idx - 1, step])
 
 
 
-fa = [2, 2, 1, 2]
-print(maximumInvitations(fa))
+
+
+# fa = [2, 2, 1, 2]
+# print(maximumInvitations(fa))
