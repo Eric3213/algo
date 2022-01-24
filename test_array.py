@@ -2,7 +2,7 @@ import bisect
 from collections import Counter, defaultdict
 from functools import cmp_to_key
 from typing import List
-
+from sortedcontainers import SortedList
 
 def maxArea(height: List[int]):
     l, r = 0, len(height) - 1
@@ -416,6 +416,31 @@ def containsNearbyDuplicate(nums: List[int], k: int):
                 return True
         dic[n] = i
     return False
+
+
+class StockPrice:
+
+    def __init__(self):
+        self.price = SortedList()
+        self.maxTimeStamp = 0
+        self.timePriceMap = defaultdict(int)
+
+    def update(self, timestamp: int, price: int) -> None:
+        if timestamp in self.timePriceMap:
+            self.price.discard(self.timePriceMap[timestamp])
+        self.price.add(price)
+        self.maxTimeStamp = max(self.maxTimeStamp, timestamp)
+        self.timePriceMap[timestamp] = price
+
+    def current(self):
+        return self.timePriceMap[self.maxTimeStamp]
+
+    def maximum(self):
+        return self.price[-1]
+
+    def minimum(self):
+        return self.price[0]
+
 
 
 if __name__ == "__main__":

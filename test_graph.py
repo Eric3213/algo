@@ -150,7 +150,33 @@ def minJumps(arr: List[int]):
             q.append([idx - 1, step])
 
 
+def secondMinimum(n: int, edges: List[List[int]], time: int, change: int):
+    graph = defaultdict(set)
+    for a, b in edges:
+        graph[a].add(b)
+        graph[b].add(a)
 
+    # dist[i][0] 表示从1到i节点最短路径长度   dist[i][1] 表示从1到i节点次短路径长度
+    dist = [[float('inf')] * 2 for _ in range(n+1)]
+    dist[1][0] = 0
+    q = deque([(1, 0)])
+    while dist[n][1] == float('inf'):
+        p = q.popleft()
+        for y in graph[p[0]]:
+            d = p[1] + 1
+            if d < dist[y][0]:
+                dist[y][0] = d
+                q.append((y, d))
+            elif dist[y][0] < d < dist[y][1]:
+                dist[y][1] = d
+                q.append((y, d))
+
+    ans = 0
+    for _ in range(dist[n][1]):
+        if ans % (change * 2) >= change:
+            ans += change * 2 - ans % (change * 2)
+        ans += time
+    return ans
 
 
 # fa = [2, 2, 1, 2]
