@@ -319,6 +319,19 @@ def findMinDifference(timePoints: List[str]):
     ans = min(ans, t0Min + 1440 - preMin)
     return ans
 
+def countValidWords(sentence: str):
+    def valid(s: str):
+        hasHyphens = False
+        for i, ch in enumerate(s):
+            if ch.isdigit() or ch in "!,." and i < len(s) - 1:
+                return False
+            if ch == '-':
+                if hasHyphens or i == 0 or i == len(s) - 1 or not s[i-1].islower() or not s[i+1].islower():
+                    return False
+                hasHyphens = True
+        return True
+    return sum(valid(s) for s in sentence.split())
+
 
 
 if __name__ == "__main__":

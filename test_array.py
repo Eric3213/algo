@@ -442,6 +442,36 @@ class StockPrice:
         return self.price[0]
 
 
+class DetectSquares:
+
+    def __init__(self):
+        self.d = defaultdict(int)
+        self.s = set()
+
+    def add(self, point: List[int]):
+        self.d[(point[0], point[1])] += 1
+        self.s.add((point[0], point[1]))
+
+    def count(self, point: List[int]):
+        ans = 0
+        for pre in self.s:
+            if pre[0] == point[0] and pre[1] == point[1]: continue
+            if abs(pre[0]-point[0]) == abs(pre[1]-point[1]):
+                ans += 1 * self.d[(pre[0], pre[1])] * self.d[(pre[0], point[1])] * self.d[(point[0], pre[1])]
+        return ans
+    
+
+def numberOfWeakCharacters(properties: List[List[int]]):
+    properties.sort(key=lambda x: (-x[0], x[1]))
+    ans = 0
+    maxDef = 0
+    for _, def_ in properties:
+        if maxDef > def_:
+            ans += 1
+        else:
+            maxDef = max(maxDef, def_)
+    return ans
+
 
 if __name__ == "__main__":
     a = [0, 1, 0, 1, 1, 0, 0]
