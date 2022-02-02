@@ -333,6 +333,35 @@ def countValidWords(sentence: str):
     return sum(valid(s) for s in sentence.split())
 
 
+def uncommonFromSentence(s1: str, s2: str):
+    freq = Counter(s1.split()) + Counter(s2.split())
+    ans = []
+    for word, occ in freq.items():
+        if occ == 1:
+            ans.append(word)
+    return ans
+
+
+def longestNiceSubstring(s: str):
+    n = len(s)
+    maxPos, maxLen = 0, 0
+    for i in range(n):
+        lower, upper = 0, 0
+        for j in range(i, n):
+            if s[j].islower():
+                lower |= 1 << (ord(s[j]) - ord('a'))
+            else:
+                upper |= 1 << (ord(s[j]) - ord('A'))
+            if lower == upper and j - i + 1 > maxLen:
+                maxPos = i
+                maxLen = j - i + 1
+    return s[maxPos: maxLen+maxPos]
+
+
+def reversePrefix(word: str, ch: str):
+    i = word.find(ch) + 1
+    return word[:i][::-1] + word[i:]
+
 
 if __name__ == "__main__":
     # s = "owoztneoer"
