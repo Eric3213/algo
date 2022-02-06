@@ -486,6 +486,54 @@ def highestPeak(isWater: List[List[int]]):
     return ans
 
 
+def findMinFibonacciNumbers(k: int):
+    f = [1, 1]
+    while f[-1] < k:
+        f.append(f[-1] + f[-2])
+    ans, i = 0, len(f) - 1
+    while k:
+        if k >= f[i]:
+            k -= f[i]
+            ans += 1
+        i -= 1
+    return ans
+
+
+def getMaximumGold(grid: List[List[int]]):
+    m, n = len(grid), len(grid[0])
+    ans = 0
+
+    def dfs(x: int, y: int, gold: int):
+        gold += grid[x][y]
+        nonlocal ans
+        ans = max(ans, gold)
+        rec = grid[x][y]
+        grid[x][y] = 0
+
+        for nx, ny in ((x-1, y), (x+1, y), (x, y+1), (x, y-1)):
+            if 0 <= nx < m and 0 <= ny < n and grid[nx][ny] > 0:
+                dfs(nx, ny, gold)
+
+        grid[x][y] = rec
+
+    for i in range(m):
+        for j in range(n):
+            if grid[i][j] != 0:
+                dfs(i, j, 0)
+    return ans
+
+
+def sumOfUnique(nums: List[int]):
+    return sum(num for num, cnt in Counter(nums).items() if cnt == 1)
+    # counter = Counter(nums)
+    # ans = 0
+    # for num, cnt in counter.items():
+    #     if cnt == 1:
+    #         ans += num
+    # return ans
+
+
+
 if __name__ == "__main__":
     a = [0, 1, 0, 1, 1, 0, 0]
     b = [0, 1, 1, 1, 0, 0, 1, 1, 0]
