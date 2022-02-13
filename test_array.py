@@ -3,6 +3,7 @@ from collections import Counter, defaultdict, deque
 from functools import cmp_to_key
 from typing import List
 from sortedcontainers import SortedList
+import math
 
 def maxArea(height: List[int]):
     l, r = 0, len(height) - 1
@@ -533,8 +534,51 @@ def sumOfUnique(nums: List[int]):
     # return ans
 
 
+def countKDifference(nums: List[int], k: int):
+    ans = 0
+    cnt = Counter()
+    for num in nums:
+        ans += cnt[num - k] + cnt[num + k]
+        cnt[num] += 1
+    return ans
+
+def simplifiedFractions(n: int) -> List[str]:
+    ans = []
+    for denominetor in range(2, n+1):
+        for numerator in range(1, denominetor):
+            if math.gcd(denominetor, numerator) == 1:
+                ans.append(f"{numerator}/{denominetor}")
+    return ans
+    # return [f"{numerator}/{denominator}" for denominator in range(2, n + 1) for numerator in range(1, denominator) if gcd(denominator, numerator) == 1]
+
+
+def numEnclaves(grid: List[List[int]]):
+    """
+    :param grid:
+    :return: 飞地的数量
+    """
+    m, n = len(grid), len(grid[0])
+    vis = [[False] * n for _ in range(m)]
+
+    def dfs(r: int, c: int):
+        if r < 0 or r >= m or c < 0 or c >= n or grid[r][c] == 0 or vis[r][c]:
+            return
+        vis[r][c] = True
+        for x, y in ((r-1, c), (r+1, c), (r, c+1), (r, c-1)):
+            dfs(x, y)
+
+    for i in range(m):
+        dfs(i, 0)
+        dfs(i, n-1)
+    for i in range(1, n-1):
+        dfs(0, i)
+        dfs(m-1, i)
+    return sum(grid[i][j] and not vis[i][j] for i in range(m) for j in range(n))
+
 
 if __name__ == "__main__":
+    # a = eval([64, 64, 64])
+    # print(len(a))
     a = [0, 1, 0, 1, 1, 0, 0]
     b = [0, 1, 1, 1, 0, 0, 1, 1, 0]
     c = [1, 1, 0, 0, 1]

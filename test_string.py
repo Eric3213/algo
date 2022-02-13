@@ -363,6 +363,13 @@ def reversePrefix(word: str, ch: str):
     return word[:i][::-1] + word[i:]
 
 
+def maxNumberOfBalloons(text: str):
+    cnt = Counter(ch for ch in text if ch in 'balon')
+    cnt['l'] //= 2
+    cnt['0'] //= 2
+    return min(cnt.values()) if len(cnt) == 5 else 0
+
+
 if __name__ == "__main__":
     # s = "owoztneoer"
     # print(originalDigits(s))
