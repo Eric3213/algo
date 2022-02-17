@@ -576,15 +576,58 @@ def numEnclaves(grid: List[List[int]]):
     return sum(grid[i][j] and not vis[i][j] for i in range(m) for j in range(n))
 
 
+def singleNonDuplicate(nums: List[int]):
+    """
+
+    :param nums: 已排序
+    :return: 未重复的那个数字  要求log(n)时间复杂度 O(1)空间复杂度
+    """
+    low, high = 0, len(nums) - 1
+    while low < high:
+        mid = (low + high) // 2
+        if nums[mid] == nums[mid ^ 1]:
+            low = mid + 1
+        else:
+            high = mid
+    return nums[low]
+
+
+def luckyNumbers(matrix: List[List[int]]):
+    minRow = [min(row) for row in matrix]
+    minCol = [max(col) for col in zip(*matrix)]
+    ans = []
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if matrix[i][j] == minRow[i] == minCol[j]:
+                ans.append(matrix[i][j])
+    return ans
+
+
+def knightProbability(n: int, k: int, row: int, column: int):
+    dp = [[[0] * n for _ in range(n)] for _ in range(k+1)]
+    for step in range(k + 1):
+        for i in range(n):
+            for j in range(n):
+                if step == 0:
+                    dp[step][i][j] = 1
+                else:
+                    for di, dj in ((-2, -1), (-2, 1), (2, -1), (2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2)):
+                        ni, nj = i + di, j + dj
+                        if 0 <= ni < n and 0 <= nj < n:
+                            dp[step][i][j] += dp[step-1][ni][nj] / 8
+    return dp[k][row][column]
+
+
 if __name__ == "__main__":
+    knightProbability(3, 2, 0, 0)
     # a = eval([64, 64, 64])
     # print(len(a))
-    a = [0, 1, 0, 1, 1, 0, 0]
-    b = [0, 1, 1, 1, 0, 0, 1, 1, 0]
-    c = [1, 1, 0, 0, 1]
-    print(minSwaps(a))
-    a = [1, 2, 3, 4]
-    print(dominantIndex(a))
+    # a = [0, 1, 0, 1, 1, 0, 0]
+    # b = [0, 1, 1, 1, 0, 0, 1, 1, 0]
+    # c = [1, 1, 0, 0, 1]
+    # print(minSwaps(a))
+    # a = [1, 2, 3, 4]
+    # print(dominantIndex(a))
     # a = [2,2,3]
     # print(permuteUnique(a))
     # a = "B0B6G0R6R0R6G9"
