@@ -618,6 +618,54 @@ def knightProbability(n: int, k: int, row: int, column: int):
     return dp[k][row][column]
 
 
+def pancakeSort(arr: List[int]):
+    """
+    煎饼排序
+    :param arr:
+    :return:
+    """
+    ans = []
+    for n in range(len(arr), 1, -1):
+        index = 0
+        for i in range(n):
+            if arr[i] > arr[index]:
+                index = i
+        if index == n - 1:
+            continue
+        m = index
+        for i in range((m+1) // 2):
+            arr[i], arr[m-i] = arr[m-i], arr[i]
+        for i in range(n // 2):
+            arr[i], arr[n-1-i] = arr[n-1-i], arr[i]
+        ans.append(index+1)
+        ans.append(n)
+    return ans
+
+
+def pushDominoes(dominoes: str):
+    s = list(dominoes)
+    n, i, left = len(s), 0, 'L'
+    while i < n:
+        j = i
+        while j < n and s[j] == '.':
+            j += 1
+        right = s[j] if j < n else 'R'
+        if left == right:
+            while i < j:
+                s[i] = right
+                i += 1
+        elif left == 'R' and right == 'L':
+            k = j-1
+            while i < k:
+                s[k] = right
+                s[i] = left
+                i += 1
+                k -= 1
+        left = right
+        i = j + 1
+    return ''.join(s)
+
+
 if __name__ == "__main__":
     knightProbability(3, 2, 0, 0)
     # a = eval([64, 64, 64])
