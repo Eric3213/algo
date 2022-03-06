@@ -370,6 +370,33 @@ def maxNumberOfBalloons(text: str):
     return min(cnt.values()) if len(cnt) == 5 else 0
 
 
+def reverseOnlyLetters(s: str):
+    ans = list(s)
+    left, right = 0, len(ans) - 1
+    while True:
+        while left < right and not s[left].isalpha():
+            left += 1
+        while right > left and not s[right].isalpha():
+            right -= 1
+        if left >= right:
+            break
+        ans[left], ans[right] = ans[right], ans[left]
+        left += 1
+        right -= 1
+    return ''.join(ans)
+
+
+def convert(s: str, numRows: int):
+    n, r = len(s), numRows
+    t = r * 2 - 2
+    ans = []
+    for i in range(r):
+        for j in range(0, n - i, t):
+            ans.append(s[i+j])
+            if 0 < i < r-1 and j + t - i < n:
+                ans.append(s[j+t-i])
+    return "".join(ans)
+
 if __name__ == "__main__":
     # s = "owoztneoer"
     # print(originalDigits(s))

@@ -4,6 +4,7 @@ from functools import cmp_to_key
 from typing import List
 from sortedcontainers import SortedList
 import math
+import heapq
 
 def maxArea(height: List[int]):
     l, r = 0, len(height) - 1
@@ -664,6 +665,107 @@ def pushDominoes(dominoes: str):
         left = right
         i = j + 1
     return ''.join(s)
+
+
+def findBalls(grid: List[List[int]]):
+    n = len(grid[0])
+    ans = [-1] * n
+    for j in range(n):
+        col = j
+        for row in grid:
+            dir = row[col]
+            col += dir
+            if col < 0 or col == n or row[col] != dir:
+                col = -1
+                break
+        ans[j] = col
+    return ans
+
+
+def findKthLargest(nums: List[int], k: int):
+    """
+    python中的堆都是小根堆
+    :param nums:
+    :return: 第k大的数字
+    """
+    # h = [x for x in nums[:k]]
+    # heapq.heapify(h)
+    # n = len(nums)
+    # for i in range(k, n):
+    #     if nums[i] > h[0]:
+    #         heapq.heappop(h)
+    #         heapq.heappush(h, nums[i])
+    # return h[0]
+
+    def partition(nums: List[int], left: int, right: int):
+        pivot = nums[left]
+        i, j = left, right
+        while i < j:
+            while i < j and nums[j] >= pivot:
+                j -= 1
+            nums[i] = nums[j]
+            while i < j and nums[i] <= pivot:
+                i += 1
+            nums[j] = nums[i]
+        nums[i] = pivot
+        return i
+
+    def topk_split(nums: List[int], k: int, left: int, right: int):
+        if left < right:
+            index = partition(nums, left, right)
+            if index == k:
+                return
+            elif index < k:
+                topk_split(nums, k, index+1, right)
+            else:
+                topk_split(nums, k, left, index-1)
+
+    topk_split(nums, len(nums)-k, 0, len(nums)-1)
+    return nums[len(nums) - k]
+
+
+def maxSubArray(nums: List[int]):
+    n = len(nums)
+    cur, ans = 0, 0
+    for i in range(1, n):
+        cur = max(nums[i], nums[i] + cur)
+        ans = max(ans, cur)
+    return ans
+
+
+def maxProfit(price: List[int]):
+    # 只买一次
+    # min_price = float('-inf')
+    # ans = 0
+    # for p in price:
+    #     ans = max(ans, p - min_price)
+    #     min_price = min(min_price, p)
+    # return ans
+
+    # 买无限次  手上只能有一只股票
+    # 贪心
+    # n = len(price)
+    # ans = 0
+    # for i in range(1, n):
+    #     temp = price[i] - price[i-1]
+    #     ans += temp if temp > 0 else 0
+    # return ans
+
+    # todo 买两次
+    
+
+
+
+def goodDaysToBobBank(security: List[int], time: int):
+    n = len(security)
+    left = [0] * n
+    right = [0] * n
+    for i in range(1, n):
+        if security[i] <= security[i-1]:
+            left[i] = left[i-1] + 1
+        if security[n-i-1] <= security[n-i]:
+            right[n-i-1] = right[n-i] + 1
+    return [i for i in range(time, n - time) if left[i] >= time and right[i] >= time]
 
 
 if __name__ == "__main__":

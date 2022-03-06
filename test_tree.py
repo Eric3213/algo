@@ -81,13 +81,13 @@ class Solution:
     def maxPathSum(self, root: TreeNode):
         self.maxSum = float('-inf')
 
-        def dfs(root):
+        def dfs(root: TreeNode):
             if not root:
                 return 0
             left = max(dfs(root.left), 0)
             right = max(dfs(root.right), 0)
             self.maxSum = max(self.maxSum, root.val + left + right)
-            return max(left, right) + root.val
+            return root.val + max(left, right)
 
         dfs(root)
         return self.maxSum
@@ -176,6 +176,27 @@ class Solution:
             root = root.right
         return True
 
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode):
+        """
+        递归
+        :param self:
+        :param root:
+        :param p:
+        :param q:
+        :return: 最近公共祖先
+        """
+        if not root or root == p or root == q:
+            return root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        if not left and not right:
+            return
+        if not left:
+            return right
+        if not right:
+            return left
+        return root
+
 
 
 class Codec:
@@ -257,8 +278,6 @@ def inorderTraversal(self, root: TreeNode):
                 ans.append(cur.val)
                 cur = cur.right
     return ans
-
-
 
 
 def pre_order(root):

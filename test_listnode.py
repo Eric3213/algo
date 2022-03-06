@@ -47,3 +47,24 @@ def deleteDuplicates(head: ListNode):
         else:
             cur = cur.next
     return dummy.next
+
+
+def reverseList(self, head: ListNode):
+    """
+    反转链表 迭代+递归
+    :param head:
+    :return:
+    """
+    # prev, cur = None, head
+    # while cur is not None:
+    #     next = cur.next
+    #     cur.next = prev
+    #     prev = cur
+    #     cur = next
+    # return prev
+    if head is None or head.next is None:
+        return head
+    node = self.reverseList(head.next)
+    head.next.next = head
+    head.next = None
+    return node
