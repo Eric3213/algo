@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 
 class ListNode:
@@ -47,6 +47,30 @@ def deleteDuplicates(head: ListNode):
         else:
             cur = cur.next
     return dummy.next
+
+
+def platesBetweenCandles(s: str, queries: List[List[int]]):
+    n = len(s)
+    preSum, left, right = [0] * n, [0] * n, [0] * n
+    l, r, temp_sum = -1, -1, 0
+    for i, ch in enumerate(s):
+        if ch == "*":
+            temp_sum += 1
+        else:
+            l = i
+        left[i] = l
+        preSum[i] = temp_sum
+    for i in range(n-1, -1, -1):
+        if s[i] == "|":
+            r = i
+        right[i] = r
+
+    ans = [0] * len(queries)
+    for i, (x, y) in enumerate(queries):
+        x, y = right[x], left[y]
+        if 0 <= x < y and y >= 0:
+            ans[i] = preSum[y] - preSum[x]
+    return ans
 
 
 def reverseList(self, head: ListNode):

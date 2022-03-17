@@ -397,6 +397,58 @@ def convert(s: str, numRows: int):
                 ans.append(s[j+t-i])
     return "".join(ans)
 
+
+def backspaceCompare(S: str, T: str):
+    # def build(s: str):
+    #     ans = list()
+    #     for ch in s:
+    #         if ch != '#':
+    #             ans.append(ch)
+    #         elif ans:
+    #             ans.pop()
+    #     return ''.join(ans)
+    # return build(S) == build(T)
+    i, j = len(S) - 1, len(T) - 1
+    toDeleteS, toDeleteT = 0, 0
+    while i >= 0 and j >= 0:
+        while i >= 0:
+            if S[i] == "#":
+                toDeleteS += 1
+                i -= 1
+            elif toDeleteS > 0:
+                toDeleteS -= 1
+                i -= 1
+            else:
+                break
+        while j >= 0:
+            if T[j] == "#":
+                toDeleteT += 1
+                j -= 1
+            elif toDeleteT > 0:
+                toDeleteT -= 1
+                j -= 1
+            else:
+                break
+        if i >= 0 and j >= 0:
+            if S[i] != T[j]:
+                return False
+        elif i >= 0 or j >= 0:
+            return False
+        i -= 1
+        j -= 1
+    return True
+
+
+def removeDuplicates(s: str):
+    ans = list()
+    for ch in s:
+        if ans and ans[-1] == ch:
+            ans.pop()
+        else:
+            ans.append(ch)
+    return "".join(ans)
+
+
 if __name__ == "__main__":
     # s = "owoztneoer"
     # print(originalDigits(s))

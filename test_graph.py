@@ -179,5 +179,37 @@ def secondMinimum(n: int, edges: List[List[int]], time: int, change: int):
     return ans
 
 
+def createIndex(sentences: List[str]):
+    n = len(sentences)
+    myDict = defaultdict(list)
+    for i in range(n):
+        string = list(set(sentences[i].split(" ")))
+        for s in string:
+            myDict[s].append(i)
+    return myDict
+
+
+def countHightestScoreNodes(parents: List[int]):
+    n = len(parents)
+    graph = [[] for _ in range(n)]
+    for i, p in parents:
+        if p != -1:
+            graph[p].append(i)
+    maxScore, ans = 0, 0
+
+    def dfs(node):
+        left = dfs(graph[node][0]) if graph[node] else 0
+        right = dfs(graph[node][1]) if len(graph[node]) == 2 else 0
+        nonlocal maxScore, ans
+        if (score := max(1, (n - left - right - 1)) * max(1, left) * max(1, right)) > maxScore:
+            maxScore, ans = score, 1
+        elif score == maxScore:
+            ans += 1
+        return left + right + 1
+
+    dfs(0)
+    return ans
+
+
 # fa = [2, 2, 1, 2]
 # print(maximumInvitations(fa))

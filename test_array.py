@@ -6,6 +6,7 @@ from sortedcontainers import SortedList
 import math
 import heapq
 
+
 def maxArea(height: List[int]):
     l, r = 0, len(height) - 1
     ans = 0
@@ -260,12 +261,12 @@ def rotate(matrix: List[List[int]]):
             matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
 
 
-def dayOfTheWeek(day:int, month:int, year:int):
+def dayOfTheWeek(day: int, month: int, year: int):
     week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     monthdays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     ans = 0
     ans += 365 * (year - 1971) + (year - 1969) // 4
-    ans += sum(monthdays[:month-1])
+    ans += sum(monthdays[:month - 1])
     if month >= 3 and (year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)):
         ans += 1
     ans += day
@@ -309,11 +310,12 @@ def combinationSum(candidates: List[int], target: int):
         for i in range(start, len(candidates)):
             c = candidates[i]
             if c == remain:
-                ans.append(use+[c])
+                ans.append(use + [c])
             elif c < remain:
-                find(i, use+[c], remain-c)
+                find(i, use + [c], remain - c)
             else:
                 return
+
     find(0, [], target)
     return ans
 
@@ -361,7 +363,7 @@ def minSwaps(nums: List[int]):
         j += 1
         if nums[j] == 1:
             cur += 1
-        if nums[i-1] == 1:
+        if nums[i - 1] == 1:
             cur -= 1
         ans = max(ans, cur)
     cur = nums[:m].count(1)
@@ -370,7 +372,7 @@ def minSwaps(nums: List[int]):
     while j + 1 < n:
         i += 1
         j += 1
-        if nums[i-1] == 1:
+        if nums[i - 1] == 1:
             cur -= 1
         if nums[j] == 1:
             cur += 1
@@ -458,7 +460,7 @@ class DetectSquares:
         ans = 0
         for pre in self.s:
             if pre[0] == point[0] and pre[1] == point[1]: continue
-            if abs(pre[0]-point[0]) == abs(pre[1]-point[1]):
+            if abs(pre[0] - point[0]) == abs(pre[1] - point[1]):
                 ans += 1 * self.d[(pre[0], pre[1])] * self.d[(pre[0], point[1])] * self.d[(point[0], pre[1])]
         return ans
 
@@ -481,10 +483,10 @@ def highestPeak(isWater: List[List[int]]):
     q = deque((i, j) for i, row in enumerate(isWater) for j, water in enumerate(row) if water)
     while q:
         i, j = q.popleft()
-        for x, y in ((i+1, j), (i-1, j), (i,j+1), (i,j-1)):
+        for x, y in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)):
             if 0 <= x < m and 0 <= y < n and ans[x][y] == -1:
                 ans[x][y] = ans[i][j] + 1
-                q.append((x,y))
+                q.append((x, y))
     return ans
 
 
@@ -512,7 +514,7 @@ def getMaximumGold(grid: List[List[int]]):
         rec = grid[x][y]
         grid[x][y] = 0
 
-        for nx, ny in ((x-1, y), (x+1, y), (x, y+1), (x, y-1)):
+        for nx, ny in ((x - 1, y), (x + 1, y), (x, y + 1), (x, y - 1)):
             if 0 <= nx < m and 0 <= ny < n and grid[nx][ny] > 0:
                 dfs(nx, ny, gold)
 
@@ -543,9 +545,10 @@ def countKDifference(nums: List[int], k: int):
         cnt[num] += 1
     return ans
 
+
 def simplifiedFractions(n: int) -> List[str]:
     ans = []
-    for denominetor in range(2, n+1):
+    for denominetor in range(2, n + 1):
         for numerator in range(1, denominetor):
             if math.gcd(denominetor, numerator) == 1:
                 ans.append(f"{numerator}/{denominetor}")
@@ -565,15 +568,15 @@ def numEnclaves(grid: List[List[int]]):
         if r < 0 or r >= m or c < 0 or c >= n or grid[r][c] == 0 or vis[r][c]:
             return
         vis[r][c] = True
-        for x, y in ((r-1, c), (r+1, c), (r, c+1), (r, c-1)):
+        for x, y in ((r - 1, c), (r + 1, c), (r, c + 1), (r, c - 1)):
             dfs(x, y)
 
     for i in range(m):
         dfs(i, 0)
-        dfs(i, n-1)
-    for i in range(1, n-1):
+        dfs(i, n - 1)
+    for i in range(1, n - 1):
         dfs(0, i)
-        dfs(m-1, i)
+        dfs(m - 1, i)
     return sum(grid[i][j] and not vis[i][j] for i in range(m) for j in range(n))
 
 
@@ -605,7 +608,7 @@ def luckyNumbers(matrix: List[List[int]]):
 
 
 def knightProbability(n: int, k: int, row: int, column: int):
-    dp = [[[0] * n for _ in range(n)] for _ in range(k+1)]
+    dp = [[[0] * n for _ in range(n)] for _ in range(k + 1)]
     for step in range(k + 1):
         for i in range(n):
             for j in range(n):
@@ -615,7 +618,7 @@ def knightProbability(n: int, k: int, row: int, column: int):
                     for di, dj in ((-2, -1), (-2, 1), (2, -1), (2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2)):
                         ni, nj = i + di, j + dj
                         if 0 <= ni < n and 0 <= nj < n:
-                            dp[step][i][j] += dp[step-1][ni][nj] / 8
+                            dp[step][i][j] += dp[step - 1][ni][nj] / 8
     return dp[k][row][column]
 
 
@@ -634,11 +637,11 @@ def pancakeSort(arr: List[int]):
         if index == n - 1:
             continue
         m = index
-        for i in range((m+1) // 2):
-            arr[i], arr[m-i] = arr[m-i], arr[i]
+        for i in range((m + 1) // 2):
+            arr[i], arr[m - i] = arr[m - i], arr[i]
         for i in range(n // 2):
-            arr[i], arr[n-1-i] = arr[n-1-i], arr[i]
-        ans.append(index+1)
+            arr[i], arr[n - 1 - i] = arr[n - 1 - i], arr[i]
+        ans.append(index + 1)
         ans.append(n)
     return ans
 
@@ -656,7 +659,7 @@ def pushDominoes(dominoes: str):
                 s[i] = right
                 i += 1
         elif left == 'R' and right == 'L':
-            k = j-1
+            k = j - 1
             while i < k:
                 s[k] = right
                 s[i] = left
@@ -688,6 +691,7 @@ def findKthLargest(nums: List[int], k: int):
     :param nums:
     :return: 第k大的数字
     """
+
     # h = [x for x in nums[:k]]
     # heapq.heapify(h)
     # n = len(nums)
@@ -716,11 +720,11 @@ def findKthLargest(nums: List[int], k: int):
             if index == k:
                 return
             elif index < k:
-                topk_split(nums, k, index+1, right)
+                topk_split(nums, k, index + 1, right)
             else:
-                topk_split(nums, k, left, index-1)
+                topk_split(nums, k, left, index - 1)
 
-    topk_split(nums, len(nums)-k, 0, len(nums)-1)
+    topk_split(nums, len(nums) - k, 0, len(nums) - 1)
     return nums[len(nums) - k]
 
 
@@ -752,8 +756,7 @@ def maxProfit(price: List[int]):
     # return ans
 
     # todo 买两次
-    
-
+    pass
 
 
 def goodDaysToBobBank(security: List[int], time: int):
@@ -761,11 +764,170 @@ def goodDaysToBobBank(security: List[int], time: int):
     left = [0] * n
     right = [0] * n
     for i in range(1, n):
-        if security[i] <= security[i-1]:
-            left[i] = left[i-1] + 1
-        if security[n-i-1] <= security[n-i]:
-            right[n-i-1] = right[n-i] + 1
+        if security[i] <= security[i - 1]:
+            left[i] = left[i - 1] + 1
+        if security[n - i - 1] <= security[n - i]:
+            right[n - i - 1] = right[n - i] + 1
     return [i for i in range(time, n - time) if left[i] >= time and right[i] >= time]
+
+
+def findRestaurant(list1: List[str], list2: List[str]):
+    ans = list()
+    d = defaultdict(int)
+    for i, n in enumerate(list1):
+        d[n] = i
+    minIndex = len(list1) + len(list2)
+    curIndex = 0
+    for i, n in enumerate(list2):
+        if n in d:
+            curIndex = i + d[n]
+            if curIndex < minIndex:
+                minIndex = curIndex
+                ans = [n]
+            elif curIndex == minIndex:
+                ans.append(n)
+    return ans
+
+
+def search(nums: List[int], target: int):
+    n = len(nums)
+    left, right = 0, n
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid
+    return -1
+
+
+def searchInsert(nums: List[int], target: int):
+    n = len(nums)
+    left, right = 0, n
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid
+    return left + 1
+
+
+def searchRange(nums: List[int], target: int):
+    """
+    :param nums:
+    :param target:
+    :return: nums中target的下标值的range
+    """
+    n = len(nums)
+
+    def binarySearch(nums: List[int], target: int):
+        """
+        :param nums:
+        :param target:
+        :return: 找到 第一个 >= target 的下标
+        """
+        n = len(nums)
+        left, right = 0, n
+        while left < right:
+            mid = (left + right) // 2
+            if nums[mid] >= target:
+                right = mid
+            else:
+                left = mid + 1
+        return left
+
+    left = binarySearch(nums, target)
+    right = binarySearch(nums, target + 1) - 1
+    if left >= n or nums[left] != target:
+        return [-1, -1]
+    return [left, right]
+
+
+def findMissingPositive(nums: List[int]):
+    n = len(nums)
+    for i in range(n):
+        if nums[i] <= 0:
+            nums[i] = n + 1
+
+    for i in range(n):
+        num = nums[i]
+        if num <= n:
+            nums[num - 1] = -abs(nums[num - 1])
+
+    for i in range(n):
+        if nums[i] > 0:
+            return i + 1
+
+    return n + 1
+
+
+def longestWords(words: List[str]):
+    longest = ""
+    candidates = {""}
+    words.sort(key=lambda x: (-len(x), x), reverse=True)
+    for word in words:
+        if word[:-1] in candidates:
+            longest = word
+            candidates.add(word)
+    return longest
+
+
+def totalFruit(fruits: List[int]):
+    if len(fruits) == 1:
+        return 1
+    l, r = 0, 1
+    ans = 0
+    type = [fruits[0]]
+    while r < len(fruits):
+        if fruits[r] != fruits[r - 1] and fruits[r] not in type:
+            ans = max(ans, r - l)
+            l = r - 1
+            while l > 0 and fruits[l - 1] == fruits[l]:
+                l -= 1
+            type = [fruits[l], fruits[r]]
+        r += 1
+    return max(ans, r - l)
+
+
+def minWin(s: str, t: str):
+    """
+    :param s:
+    :param t:
+    :return: s中涵盖t所有字母的最小字串
+    """
+    if len(s) < len(t):
+        return ""
+    n = len(s)
+    t = Counter(t)
+    start, end = 0, 0
+    min_len = float('inf')
+    look_up = Counter()
+    ans = ""
+    while end < n:
+        look_up[s[end]] += 1
+        end += 1
+        while all(map(lambda x: look_up[x] >= t[x], t.keys())):
+            if end - start < min_len:
+                ans = s[start: end]
+                min_len = end - start
+            look_up[s[start]] -= 1
+            start += 1
+    return ans
+
+
+def lastStoneWeight(stones: List[int]):
+    heap = [-stone for stone in stones]
+    heapq.heapify(heap)
+    while len(heap) > 1:
+        x, y = heapq.heappop(heap), heapq.heappop(heap)
+        if x != y:
+            heapq.heappush(heap, x-y)
+    return 0 if not heap else -heap[0]
 
 
 if __name__ == "__main__":

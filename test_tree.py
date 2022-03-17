@@ -1,4 +1,5 @@
 # Definition for a binary tree node.
+from collections import deque
 from typing import Optional
 
 
@@ -286,6 +287,43 @@ def pre_order(root):
     ans.append(root.val)
     pre_order(root.left)
     pre_order(root.right)
+
+
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.children = None
+
+
+def preorder(root: Node):
+    if not root:
+        return []
+    stack = [root]
+    ans = list()
+    while stack:
+        node = stack.pop()
+        ans.append(node.val)
+        stack.extend(node.children[::-1])
+    return ans
+
+
+def averageOfLevels(root: TreeNode):
+    ans = []
+    q = deque([root])
+    while q:
+        total = 0
+        size = len(q)
+        for _ in range(size):
+            node = q.popleft()
+            total += node.val
+            left, right = node.left, node.right
+            if left:
+                q.append(left)
+            if right:
+                q.append(right)
+        ans.append(total / size)
+    return ans
+
 
 
 ser = Codec()
