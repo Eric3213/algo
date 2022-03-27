@@ -930,8 +930,56 @@ def lastStoneWeight(stones: List[int]):
     return 0 if not heap else -heap[0]
 
 
+def uniqueOccurrences(arr: List[int]):
+    c = Counter(arr)
+    s = c.values()
+    return len(s) == len(set(s))
+
+
+def trailingZeroes(n: int) -> int:
+    if n == 0: return 0
+    zeros = [0] * n
+    no_zeros = [1] * n
+    for i in range(1, n):
+        temp = no_zeros[i - 1] * (i + 1)
+        addict = 0
+        while temp % 10 == 0:
+            temp //= 10
+            addict += 1
+        no_zeros[i] = temp
+        zeros[i] = zeros[i - 1] + addict
+    return zeros[n - 1]
+
+
+def generateMatrix(n: int):
+    matrix = [[0] * n for _ in range(n)]
+    left, right, up, down = 0, n-1, 0, n-1
+    num = 1
+    while left < right and up < down:
+        for x in range(left, right):
+            matrix[up][x] = num
+            num += 1
+        for x in range(up, down):
+            matrix[x][right] = num
+            num += 1
+        for x in range(right, left, -1):
+            matrix[down][x] = num
+            num += 1
+        for x in range(down, up, -1):
+            matrix[x][left] = num
+            num += 1
+        left += 1
+        right -= 1
+        up += 1
+        down -= 1
+    if n % 2:
+        matrix[n//2][n//2] = num
+    return matrix
+
+
 if __name__ == "__main__":
-    knightProbability(3, 2, 0, 0)
+    print(trailingZeroes(5))
+    # knightProbability(3, 2, 0, 0)
     # a = eval([64, 64, 64])
     # print(len(a))
     # a = [0, 1, 0, 1, 1, 0, 0]
