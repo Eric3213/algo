@@ -281,7 +281,7 @@ def inorderTraversal(self, root: TreeNode):
     return ans
 
 
-def pre_order(root):
+def pre_order(root, ans=None):
     if not root:
         return
     ans.append(root.val)
@@ -324,19 +324,17 @@ def averageOfLevels(root: TreeNode):
         ans.append(total / size)
     return ans
 
-
-
-ser = Codec()
-deser = Codec()
-root = TreeNode(1)
-left = TreeNode(2)
-right = TreeNode(3)
-root.left = left
-root.right = right
-right.left = TreeNode(4)
-right.right = TreeNode(5)
-
-print(ser.serialize(root))
-ans = []
-pre_order((deser.deserialize(ser.serialize(root))))
-print(ans)
+# ser = Codec()
+# deser = Codec()
+# root = TreeNode(1)
+# left = TreeNode(2)
+# right = TreeNode(3)
+# root.left = left
+# root.right = right
+# right.left = TreeNode(4)
+# right.right = TreeNode(5)
+#
+# print(ser.serialize(root))
+# ans = []
+# pre_order((deser.deserialize(ser.serialize(root))))
+# print(ans)

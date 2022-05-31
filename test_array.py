@@ -1,10 +1,11 @@
 import bisect
 from collections import Counter, defaultdict, deque
-from functools import cmp_to_key
+from functools import cmp_to_key, lru_cache
 from typing import List
 from sortedcontainers import SortedList
 import math
 import heapq
+import random
 
 
 def maxArea(height: List[int]):
@@ -926,7 +927,7 @@ def lastStoneWeight(stones: List[int]):
     while len(heap) > 1:
         x, y = heapq.heappop(heap), heapq.heappop(heap)
         if x != y:
-            heapq.heappush(heap, x-y)
+            heapq.heappush(heap, x - y)
     return 0 if not heap else -heap[0]
 
 
@@ -953,7 +954,7 @@ def trailingZeroes(n: int) -> int:
 
 def generateMatrix(n: int):
     matrix = [[0] * n for _ in range(n)]
-    left, right, up, down = 0, n-1, 0, n-1
+    left, right, up, down = 0, n - 1, 0, n - 1
     num = 1
     while left < right and up < down:
         for x in range(left, right):
@@ -973,12 +974,107 @@ def generateMatrix(n: int):
         up += 1
         down -= 1
     if n % 2:
-        matrix[n//2][n//2] = num
+        matrix[n // 2][n // 2] = num
     return matrix
 
 
+def missingRolls(rolls: List[int], mean: int, n: int):
+    missingSum = mean * (len(rolls) + n) - sum(rolls)
+    if not n <= missingSum <= n * 6:
+        return []
+    zheng, yu = divmod(missingSum, n)
+    return [zheng + 1] * yu + [zheng] * (n - yu)
+
+
+# def deserialize(s: str):
+#     index = 0
+#
+#     def dfs() -> NestedInteger:
+#         nonlocal index
+#         if s[index] == '[':
+#             index += 1
+#             ni = NestedInteger()
+#             while s[index] != ']':
+#                 ni.add(dfs())
+#                 if s[index] == ',':
+#                     index += 1
+#             index += 1
+#             return ni
+#         else:
+#             negative = False
+#             if s[index] == '-':
+#                 negative = True
+#                 index += 1
+#             num = 0
+#             while index < len(s) and s[index].isdigit():
+#                 num *= 10
+#                 num += int(s[index])
+#                 index += 1
+#             if negative:
+#                 num = -num
+#             return NestedInteger(num)
+#
+#     return dfs()
+
+
+def findKthNumber(self, m: int, n: int, k: int):
+    """
+    乘法表中找第k小的元素   使用二分查找
+    :param self:
+    :param m: m行
+    :param n: n列
+    :param k: 第k小的元素
+    :return:
+    """
+    if m > n:
+        return self.findKthNumber(n, m, k)
+    left, right = 1, n * m
+
+    def check(num):
+        return sum(min(n, num // row) for row in range(1, m + 1))
+
+    while left < right:
+        mid = (left + right) >> 1
+        if check(mid) < k:
+            left = mid + 1
+        else:
+            right = mid
+    return left
+
+
+def repeatedNTimes(self, nums: List[int]):
+    n = len(nums)
+
+    while True:
+        x, y = random.randrange(n), random.randrange(n)
+        if x != y and nums[x] == nums[y]:
+            return nums[x]
+
+
+def canIWin(maxChoosableInteger: int, desiredTotal: int):
+    """
+    游戏规则类似于100 game
+    :param maxChoosableInteger: 从1-maxChoosableInteger
+    :param desiredTotal:  目标
+    :return: 我是否能赢
+    """
+    @lru_cache
+    def dfs(usedNumbers: int, curTotal: int):
+        for i in range(maxChoosableInteger):
+            if (usedNumbers >> i) & 1 == 0:
+                if curTotal + i + 1 >= desiredTotal or not dfs(usedNumbers | (1 << i), curTotal + i + 1):
+                    return True
+        return False
+    return (1 + maxChoosableInteger) * maxChoosableInteger // 2 >= desiredTotal and dfs(0, 0)
+
+
 if __name__ == "__main__":
-    print(trailingZeroes(5))
+    # a = "dig1 9 8 6 23"
+    # print(a.split(" ", 1))
+    print(canIWin(10, 11))
+    a = [1,2,3,4,5]
+    print(sum(a[:0]))
+    # print(trailingZeroes(5))
     # knightProbability(3, 2, 0, 0)
     # a = eval([64, 64, 64])
     # print(len(a))
