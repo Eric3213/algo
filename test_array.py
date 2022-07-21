@@ -2,7 +2,6 @@ import bisect
 from collections import Counter, defaultdict, deque
 from functools import cmp_to_key, lru_cache
 from typing import List
-from sortedcontainers import SortedList
 import math
 import heapq
 import random
@@ -1058,6 +1057,7 @@ def canIWin(maxChoosableInteger: int, desiredTotal: int):
     :param desiredTotal:  目标
     :return: 我是否能赢
     """
+
     @lru_cache
     def dfs(usedNumbers: int, curTotal: int):
         for i in range(maxChoosableInteger):
@@ -1065,15 +1065,163 @@ def canIWin(maxChoosableInteger: int, desiredTotal: int):
                 if curTotal + i + 1 >= desiredTotal or not dfs(usedNumbers | (1 << i), curTotal + i + 1):
                     return True
         return False
+
     return (1 + maxChoosableInteger) * maxChoosableInteger // 2 >= desiredTotal and dfs(0, 0)
 
 
+class Solution:
+
+    def makeSquare(self, matchsticks: List[int]):
+        """
+        六一特辑  玩火柴的小姑娘  使用 状压+动归
+        :param matchsticks:
+        :return:
+        """
+        totalLen = sum(matchsticks)
+        if totalLen % 4:
+            return False
+        tLen = totalLen // 4
+
+        dp = [-1] * (1 << len(matchsticks))
+        dp[0] = 0
+        for s in range(1, len(dp)):
+            for k, v in enumerate(matchsticks):
+                if s & (1 << k) == 0:
+                    continue
+                s1 = s & ~(1 << k)
+                if dp[s1] >= 0 and dp[s1] + v <= tLen:
+                    dp[s] = (dp[s1] + v) % tLen
+                    break
+        return dp[-1] == 0
+
+
+class MyCalendarThree:
+    def __init__(self):
+        self.tree = defaultdict(int)
+        self.lazy = defaultdict(int)
+
+    def update(self, start: int, end: int, left: int, right: int, idx: int):
+        if start > right or end < left:
+            return
+        if start <= left and end >= right:
+            self.tree[idx] += 1
+            self.lazy[idx] += 1
+        else:
+            mid = left + (right - left) // 2
+            self.update(start, end, left, mid, idx * 2)
+            self.update(start, end, mid + 1, right, idx * 2 + 1)
+            self.tree[idx] = self.lazy[idx] + max(self.tree[idx * 2], self.tree[idx * 2 + 1])
+
+    def book(self, start: int, end: int) -> int:
+        self.update(start, end - 1, 0, 10 ** 9, 1)
+        return self.tree[1]
+
+
+def minEatingSpeed(piles: List[int], h: int):
+    left, right = 1, max(piles)
+    while left < right:
+        mid = left + ((right - left) >> 1)
+        total = sum([math.ceil(x / mid) for x in piles])
+        if total >= h:
+            left = mid
+        else:
+            right = mid - 1
+    return left
+
+
+def strongPasswordCheckerII(password: str) -> bool:
+    temp = '!@#$%^&*()-+'
+    n = len(password)
+    if n < 8:
+        print('n < 8')
+        return False
+    flag1, flag2, flag3, flag4 = 0, 0, 0, 0
+    for i in range(n - 1):
+        if password[i] == password[i + 1]:
+            print(f'{password[i]} = {password[i + 1]}')
+            return False
+        if password[i] in temp:
+            flag4 = 1
+        elif password[i].isdigit():
+            flag3 = 1
+        elif password[i].islower():
+            flag1 = 1
+        elif password[i].isupper():
+            flag2 = 1
+    print(f'{flag1} / {flag2} / {flag3} / {flag4}')
+    return True if (flag1 and flag2 and flag3 and flag4) else False
+
+
+def minPathCost(grid: List[List[int]], moveCost: List[List[int]]) -> int:
+    m, n = len(grid), len(grid[0])
+    ans = [[0 for _ in range(n)] for _ in range(m)]
+    path_sum = [[0 for _ in range(n)] for _ in range(m)]
+    for i in range(m):
+        for j in range(n):
+            path_sum[i][j] = grid[i][j]
+    for i in range(1, m):
+        for j in range(n):
+            idx, num = -1, 20000
+            for k in range(n):
+                index = path_sum[i - 1][k]
+                if (ans[i - 1][k] + moveCost[grid[i - 1][k]][j]) < num:
+                    num = ans[i - 1][k] + moveCost[grid[i - 1][k]][j]
+                    idx = index
+            ans[i][j] = num
+            path_sum[i][j] = grid[i][j] + idx
+    index = 0
+    maxSum = math.inf
+    for j in range(n):
+        if ans[m - 1][j] < maxSum:
+            maxSum = ans[m - 1][j]
+            index = j
+    return path_sum[m - 1][index] + ans[m - 1][index]
+
+
+x, y = defaultdict(int), defaultdict(int)
+
+
+def work(n: int):
+    for i in range(2, int(math.sqrt(n))):
+        if n % i == 0:
+            cur = 0
+            while n % i == 0:
+                n //= i
+                cur += 1
+            if (cur % 2):
+                x[i] += 1
+            else:
+                y[i] += 1
+    if n > 1:
+        x[n] += 1
+
+def solute(n, temp: List[int]):
+    ans = 0
+    for v in temp:
+        work(v)
+    for i in range(100005):
+        if (x[i] != 0 and x[i] < n):
+            ans += min(x[i], n - x[i])
+        elif (x[i] != 0 and y[i] != 0):
+            ans += min(x[i], y[i])
+    return ans
+
+
 if __name__ == "__main__":
+    n = 3
+    temp = [2,1,2]
+    print(solute(n, temp))
     # a = "dig1 9 8 6 23"
     # print(a.split(" ", 1))
-    print(canIWin(10, 11))
-    a = [1,2,3,4,5]
-    print(sum(a[:0]))
+    # print(1 << 0)
+    # print(canIWin(10, 11))
+    # a = "IloveLe3tcode!"
+    # print(strongPasswordCheckerII(a))
+    # a = [[5, 3], [4, 0], [2, 1]]
+    # b = [[9, 8], [1, 5], [10, 12], [18, 6], [2, 4], [14, 3]]
+    # print(minPathCost(a, b))
+    # a = [1,2,3,4,5]
+    # print(sum(a[:0]))
     # print(trailingZeroes(5))
     # knightProbability(3, 2, 0, 0)
     # a = eval([64, 64, 64])

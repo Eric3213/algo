@@ -1,5 +1,6 @@
 # Definition for a binary tree node.
 from collections import deque
+from math import inf
 from typing import Optional
 
 
@@ -8,6 +9,14 @@ class TreeNode:
         self.val = val
         self.left = left
         self.right = right
+
+    def print_1(self, r):
+        if not r:
+            return
+        self.print_1(r.left)
+        self.print_1(r.right)
+        print(r.val)
+        return
 
 
 class Solution:
@@ -202,24 +211,48 @@ class Solution:
 
 class Codec:
 
-    def serialize(self, root):
-        if not root:
-            return "None"
-        return str(root.val) + ',' + self.serialize(root.left) + ',' + self.serialize(root.right)
+    # def serialize(self, root):
+    #     if not root:
+    #         return "None"
+    #     return str(root.val) + ',' + self.serialize(root.left) + ',' + self.serialize(root.right)
+    #
+    # def deserialize(self, data):
+    #
+    #     def dfs(datalist):
+    #         val = datalist.pop(0)
+    #         if val == 'None':
+    #             return None
+    #         root = TreeNode(int(val))
+    #         root.left = dfs(datalist)
+    #         root.right = dfs(datalist)
+    #         return root
+    #
+    #     datalist = data.split(',')
+    #     return dfs(datalist)
+    def serialize(self, root: TreeNode):
+        ans = []
+        def postOrder(root: TreeNode):
+            if root is None:
+                return
+            postOrder(root.left)
+            postOrder(root.right)
+            ans.append(root.val)
+        postOrder(root)
+        return " ".join(map(str, ans))
 
     def deserialize(self, data):
-
-        def dfs(datalist):
-            val = datalist.pop(0)
-            if val == 'None':
+        ans = list(map(int, data.split()))
+        def construct(lower, upper):
+            if ans == [] or ans[-1] < lower or ans[-1] > upper:
                 return None
-            root = TreeNode(int(val))
-            root.left = dfs(datalist)
-            root.right = dfs(datalist)
+            val = ans.pop()
+            root = TreeNode(val)
+            root.right = construct(val, upper)
+            root.left = construct(lower, val)
             return root
+        root = construct(-inf, inf)
+        return root
 
-        datalist = data.split(',')
-        return dfs(datalist)
 
 
 def inorderTraversal(self, root: TreeNode):
@@ -338,3 +371,9 @@ def averageOfLevels(root: TreeNode):
 # ans = []
 # pre_order((deser.deserialize(ser.serialize(root))))
 # print(ans)
+
+ser = Codec()
+root = TreeNode(2)
+root.left = TreeNode(1)
+root.right = TreeNode(3)
+ser.deserialize("1 3 2").print_1(ser.deserialize("1 3 2"))

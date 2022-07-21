@@ -449,6 +449,38 @@ def removeDuplicates(s: str):
     return "".join(ans)
 
 
+class Solution:
+
+    def strStr(self, haystack: str, needle: str):
+        a, b = len(haystack), len(needle)
+        if a == 0:
+            return 0
+        next = self.getnext(b, needle)
+        p = -1
+        for j in range(a):
+            while p > -1 and needle[p+1] != haystack[j]:
+                p = next[p]
+            if needle[p+1] == haystack[j]:
+                p += 1
+            if p == b-1:
+                return j - b + 1
+        return -1
+
+
+    def getnext(self, n, needle):
+        next = ['' for i in range(n)]
+        j = -1
+        next[0] = j
+        for i in range(1, n):
+            while j > -1 and needle[j+1] != needle[i]:
+                j = next[j]
+            if needle[j+1] == needle[i]:
+                j += 1
+            next[i] = j
+        return next
+
+
+
 if __name__ == "__main__":
     # s = "owoztneoer"
     # print(originalDigits(s))

@@ -211,5 +211,82 @@ def countHightestScoreNodes(parents: List[int]):
     return ans
 
 
+from itertools import pairwise
+
+
+class Solution:
+
+    def alienOrder(self, words: List[str]):
+        g = defaultdict(list)
+        inDeg = {c: 0 for c in words[0]}
+        for s, t in pairwise(words):
+            for c in t:
+                inDeg.setdefault(c, 0) # 对于 inDeg中没有的c 做操作
+            for u, v in zip(s, t):
+                if u != v:
+                    g[u].append(v)
+                    inDeg[v] += 1
+                    break
+            else:   # 如果没有break 执行else
+                if len(s) > len(t):
+                    return ""
+        q = [u for u, d in inDeg.items() if d == 0]
+        for u in q:
+            for v in g[u]:
+                inDeg[v] -= 1
+                if inDeg[v] == 0:
+                    q.append(v)
+        return "".join(q) if len(q) == len(inDeg) else ""
+
+def countPairs(n: int, edges: List[List[int]]) -> int:
+    N = n
+    groups = []
+    temp = defaultdict(list)
+    flags = [0] * n
+    for e, v in edges:
+        temp[e].append(v)
+        temp[v].append(e)
+
+    i = 0
+    while i < N:
+        print(f'i = {i}')
+        if flags[i] == 1:
+            print(f'flag{i} = 1')
+            i += 1
+            continue
+        temp_list = temp[i]
+        if len(temp_list) == 0:
+            groups.append(1)
+            flags[i] = 1
+            i += 1
+            continue
+        cur_group_list = deque()
+        cur_group_list.append(i)
+        flags[i] = 1
+        cur_group_len = 0
+        while cur_group_list:
+            node = cur_group_list.popleft()
+            cur_group_len += 1
+            if len(temp[node]) > 0:
+                for n in temp[node]:
+                    if flags[n] == 0:
+                        cur_group_list.append(n)
+                        flags[n] = 1
+        print(groups)
+        groups.append(cur_group_len)
+        i += 1
+        print(i)
+    # if len(groups) == 1:
+    #     return 0
+    # ans = 0
+    # for number in groups:
+    #     ans += number * (N - number)
+    # return ans // 2
+    return groups
+
+
+# s = Solution()
+# print(s.alienOrder(["wrt","wrf","er","ett","rftt"]))
 # fa = [2, 2, 1, 2]
 # print(maximumInvitations(fa))
+print(countPairs(5, [[1,0],[3,1],[0,4],[2,1]]))
